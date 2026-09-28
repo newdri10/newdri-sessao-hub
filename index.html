@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0b0d12">
+<title>Newdri Sessão</title>
+<style>
+:root{
+  --bg:#0b0d12; --card:#151922; --line:#2a3140; --txt:#e8edf5; --dim:#8b95a8;
+  --acc:#c9a46a; --ok:#6ee7b7; --warn:#f59e0b; --flash:#fff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.45 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif}
+body{padding:env(safe-area-inset-top) 14px 88px}
+h1{font-size:1.15rem;margin:8px 0 2px;letter-spacing:.04em}
+.sub{color:var(--dim);font-size:.82rem;margin:0 0 14px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0}
+label{display:block;font-size:.72rem;color:var(--dim);margin:8px 0 4px;text-transform:uppercase;letter-spacing:.06em}
+input,select,textarea{width:100%;background:#0e1118;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit}
+textarea{min-height:72px}
+button{border:0;border-radius:12px;padding:11px 14px;font-weight:600;cursor:pointer}
+.btn{background:var(--acc);color:#1a1408}
+.btn2{background:#222836;color:var(--txt);border:1px solid var(--line)}
+.btn3{background:#1c2433;color:var(--dim)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:#10141c;border-top:1px solid var(--line);padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+.nav button{flex:1;background:transparent;color:var(--dim);font-size:.72rem}
+.nav button.on{color:var(--acc)}
+.hidden{display:none}
+.tag{display:inline-block;font-size:.7rem;border:1px solid var(--line);border-radius:99px;padding:3px 8px;margin:2px;color:var(--dim)}
+.tag.on{border-color:var(--acc);color:var(--acc)}
+.hist{font-size:.86rem;border-bottom:1px solid var(--line);padding:8px 0}
+.stage{position:relative;height:280px;border-radius:16px;overflow:hidden;background:#05060a;border:1px solid var(--line)}
+canvas{width:100%;height:100%;display:block}
+.flash{position:absolute;inset:0;opacity:0;background:#fff;pointer-events:none}
+.dot{position:absolute;top:50%;width:28px;height:28px;margin-top:-14px;border-radius:50%;background:#e8edf5;box-shadow:0 0 18px #fff}
+#colorWash{height:120px;border-radius:12px;border:1px solid var(--line)}
+.timer{font-variant-numeric:tabular-nums;font-size:1.4rem;color:var(--acc)}
+</style>
+</head>
+<body>
+<header>
+  <h1>NEWDRI · SESSÃO</h1>
+  <p class="sub" id="who">Paciente — registro local neste aparelho</p>
+</header>
+
+<section id="v-sessao">
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <div>
+        <div class="sub" style="margin:0">Sessão atual</div>
+        <div class="timer" id="clock">00:00</div>
+      </div>
+      <div class="row">
+        <button class="btn" id="btnStart">Iniciar</button>
+        <button class="btn2" id="btnEnd">Encerrar e salvar</button>
+      </div>
+    </div>
+    <label>Protocolo</label>
+    <select id="proto">
+      <option>Autohipnose</option>
+      <option>Meditação</option>
+      <option>EMDR com áudio</option>
+      <option>Espiral hipnótica</option>
+      <option>Cores + flash + PsicoTron</option>
+      <option>Metáfora guiada</option>
+      <option>Sono / indução noturna</option>
+    </select>
+    <label>Áudio pré-gravado</label>
+    <select id="audio">
+      <option value="">— sem áudio —</option>
+      <option value="https://drive.google.com/file/d/1C23_pXXYD2KmPY4Y26_pt4IngvfZJny2/view">Dormir melhor</option>
+      <option value="https://drive.google.com/file/d/1VjPcws_BtIYj351eRNf538-9b4ssqeiR/view">Criando segurança</option>
+      <option value="https://drive.google.com/file/d/1-yaijKIsM11kkh5EXRH6w8G2Wq8T-0Vx/view">Merecimento e riquezas</option>
+      <option value="https://drive.google.com/file/d/1RoQB75D0lC-7edNnpc4WPRXf_QO9pEsH/view">Merecimento HARD</option>
+      <option value="https://drive.google.com/file/d/1bTyKjoOLzRQf45r_jd39EjHRC2X1WA0E/view">15 min ansiedade</option>
+      <option value="https://drive.google.com/file/d/1BnRhXGgcT6nhQX-MSauXms4uV3SUUGmu/view">Fundo para hipnose</option>
+    </select>
+    <button class="btn2" style="margin-top:8px;width:100%" id="btnAudio">Abrir áudio no Drive</button>
+  </div>
+  <div class="card">
+    <div class="grid2">
+      <div><label>FC início</label><input id="hr0" inputmode="numeric" placeholder="bpm"></div>
+      <div><label>FC fim</label><input id="hr1" inputmode="numeric" placeholder="bpm"></div>
+      <div><label>GSR / PsicoTron início</label><input id="gsr0" placeholder="valor ou ↓/↑"></div>
+      <div><label>GSR / PsicoTron fim</label><input id="gsr1" placeholder="queda = aceitação"></div>
+      <div><label>Profundidade 1–10</label><input id="depth" inputmode="numeric" placeholder="7"></div>
+      <div><label>Estímulo usado</label><input id="stimUsed" placeholder="espiral / flash / cor"></div>
+    </div>
+    <label>Metáfora</label>
+    <input id="meta" placeholder="escada, oceano, luz dourada…">
+    <label>Notas</label>
+    <textarea id="notes" placeholder="o que grudou, resistência, âncora"></textarea>
+  </div>
+</section>
+
+<section id="v-stim" class="hidden">
+  <div class="card">
+    <div class="row">
+      <button class="btn2" data-mode="spiral">Espiral</button>
+      <button class="btn2" data-mode="emdr">EMDR visual</button>
+      <button class="btn2" data-mode="color">Cores</button>
+      <button class="btn2" data-mode="flash">Flash + cor</button>
+      <button class="btn3" id="stimStop">Parar</button>
+    </div>
+    <label>Velocidade EMDR / flash</label>
+    <input type="range" id="spd" min="200" max="1600" value="700">
+    <label>Cor do wash</label>
+    <div class="row" id="swatches">
+      <span class="tag on" data-c="#1e3a5f">azul</span>
+      <span class="tag" data-c="#3f2a12">âmbar</span>
+      <span class="tag" data-c="#14261c">verde</span>
+      <span class="tag" data-c="#2a1220">violeta</span>
+      <span class="tag" data-c="#111">preto</span>
+    </div>
+    <div id="colorWash" style="background:#1e3a5f;margin-top:8px"></div>
+  </div>
+  <div class="stage" id="stage">
+    <canvas id="cv"></canvas>
+    <div class="dot" id="dot" style="display:none;left:20px"></div>
+    <div class="flash" id="fl"></div>
+  </div>
+  <p class="sub">Olhos no estímulo. Fone no áudio. PsicoTron nos eletrodos. Flash da tela marca o pulso — anote GSR quando cair.</p>
+</section>
+
+<section id="v-hist" class="hidden">
+  <div class="card">
+    <div class="row">
+      <button class="btn2" id="expCsv">Exportar CSV</button>
+      <button class="btn2" id="expJson">Exportar JSON</button>
+    </div>
+    <div id="hist"></div>
+  </div>
+</section>
+
+<section id="v-pac" class="hidden">
+  <div class="card">
+    <label>Nome do paciente / clone</label>
+    <input id="pname" placeholder="Newton / Victoria / código">
+    <label>Código do clone (troca o arquivo de dados)</label>
+    <input id="pid" placeholder="newton | p001 | victoria">
+    <button class="btn" id="saveProf" style="margin-top:10px;width:100%">Aplicar neste aparelho</button>
+    <button class="btn2" id="newClone" style="margin-top:8px;width:100%">Novo clone vazio (apaga histórico local deste código)</button>
+    <p class="sub">Replicar para paciente: envie este mesmo HTML. Peça para ela colocar o nome e um código só dela. O histórico não sobe para a nuvem — fica no Safari/Chrome dela. Você recolhe o JSON no retorno da sessão.</p>
+    <p class="sub">Kardia / Apple Watch: anote FC à mão por enquanto. Integração automática HealthKit exige app nativo — próximo degrau.</p>
+  </div>
+</section>
+
+<nav class="nav">
+  <button class="on" data-v="v-sessao">Sessão</button>
+  <button data-v="v-stim">Estímulo</button>
+  <button data-v="v-hist">Histórico</button>
+  <button data-v="v-pac">Paciente</button>
+</nav>
+
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const key = () => 'newdri.sess.' + (localStorage.getItem('newdri.pid') || 'padrao');
+const load = () => JSON.parse(localStorage.getItem(key()) || '[]');
+const saveAll = a => localStorage.setItem(key(), JSON.stringify(a));
+
+function who(){
+  const n = localStorage.getItem('newdri.pname') || 'sem nome';
+  const id = localStorage.getItem('newdri.pid') || 'padrao';
+  $('#who').textContent = n + ' · clone ' + id + ' · dados só neste aparelho';
+  $('#pname').value = localStorage.getItem('newdri.pname') || '';
+  $('#pid').value = localStorage.getItem('newdri.pid') || '';
+}
+who();
+
+$$('.nav button').forEach(b => b.onclick = () => {
+  $$('.nav button').forEach(x => x.classList.remove('on'));
+  b.classList.add('on');
+  ['v-sessao','v-stim','v-hist','v-pac'].forEach(id => $('#'+id).classList.toggle('hidden', id !== b.dataset.v));
+  if (b.dataset.v === 'v-hist') renderHist();
+});
+
+let t0 = null, tick = null, mode = null, raf = 0, flashT = 0;
+function fmt(ms){
+  const s = Math.floor(ms/1000); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+}
+$('#btnStart').onclick = () => {
+  t0 = Date.now();
+  clearInterval(tick);
+  tick = setInterval(() => $('#clock').textContent = fmt(Date.now()-t0), 250);
+};
+$('#btnAudio').onclick = () => {
+  const u = $('#audio').value; if (u) window.open(u, '_blank');
+};
+$('#btnEnd').onclick = () => {
+  const rec = {
+    id: crypto.randomUUID(),
+    start: t0 ? new Date(t0).toISOString() : new Date().toISOString(),
+    end: new Date().toISOString(),
+    durSec: t0 ? Math.round((Date.now()-t0)/1000) : 0,
+    proto: $('#proto').value,
+    audio: $('#audio').selectedOptions[0].text,
+    hr0: $('#hr0').value, hr1: $('#hr1').value,
+    gsr0: $('#gsr0').value, gsr1: $('#gsr1').value,
+    depth: $('#depth').value,
+    stim: $('#stimUsed').value,
+    meta: $('#meta').value,
+    notes: $('#notes').value
+  };
+  const a = load(); a.unshift(rec); saveAll(a);
+  t0 = null; clearInterval(tick); $('#clock').textContent = '00:00';
+  alert('Sessão gravada: ' + rec.proto + ' · ' + rec.durSec + 's');
+  renderHist();
+};
+
+function renderHist(){
+  const a = load();
+  $('#hist').innerHTML = a.length ? a.map(r => `<div class="hist"><b>${new Date(r.start).toLocaleString('pt-BR')}</b> · ${r.durSec}s<br>${r.proto} · ${r.audio}<br>FC ${r.hr0||'—'}→${r.hr1||'—'} · GSR ${r.gsr0||'—'}→${r.gsr1||'—'} · prof ${r.depth||'—'}<br>${r.meta||''} ${r.notes||''}</div>`).join('') : '<p class="sub">Nenhuma sessão neste clone.</p>';
+}
+function download(name, text, type){
+  const blob = new Blob([text], {type}); const u = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=u; a.download=name; a.click(); URL.revokeObjectURL(u);
+}
+$('#expCsv').onclick = () => {
+  const a = load();
+  const head = 'inicio,fim,duracao_s,protocolo,audio,fc_ini,fc_fim,gsr_ini,gsr_fim,profundidade,estimulo,metafora,notas';
+  const lines = a.map(r => [r.start,r.end,r.durSec,r.proto,r.audio,r.hr0,r.hr1,r.gsr0,r.gsr1,r.depth,r.stim,r.meta,r.notes].map(x => '"'+String(x||'').replace(/"/g,'""')+'"').join(','));
+  download('newdri-sessoes.csv', head+'\n'+lines.join('\n'), 'text/csv');
+};
+$('#expJson').onclick = () => download('newdri-sessoes.json', JSON.stringify({paciente:localStorage.getItem('newdri.pname'), clone:localStorage.getItem('newdri.pid'), sessoes:load()}, null, 2), 'application/json');
+
+$('#saveProf').onclick = () => {
+  localStorage.setItem('newdri.pname', $('#pname').value.trim());
+  localStorage.setItem('newdri.pid', ($('#pid').value.trim() || 'padrao').toLowerCase());
+  who(); alert('Clone aplicado.');
+};
+$('#newClone').onclick = () => {
+  const id = ($('#pid').value.trim() || 'padrao').toLowerCase();
+  localStorage.setItem('newdri.pid', id);
+  localStorage.setItem('newdri.pname', $('#pname').value.trim());
+  localStorage.setItem(key(), '[]');
+  who(); renderHist(); alert('Clone vazio pronto: ' + id);
+};
+
+const cv = $('#cv'), ctx = cv.getContext('2d');
+const fl = $('#fl'), dot = $('#dot');
+let color = '#1e3a5f', ang = 0, emdrDir = 1, emdrX = 20;
+function resize(){ cv.width = cv.clientWidth*devicePixelRatio; cv.height = cv.clientHeight*devicePixelRatio; }
+resize(); addEventListener('resize', resize);
+$$('#swatches .tag').forEach(t => t.onclick = () => {
+  $$('#swatches .tag').forEach(x => x.classList.remove('on')); t.classList.add('on');
+  color = t.dataset.c; $('#colorWash').style.background = color;
+});
+$$('[data-mode]').forEach(b => b.onclick = () => { mode = b.dataset.mode; $('#stimUsed').value = mode; loop(); });
+$('#stimStop').onclick = () => { mode = null; cancelAnimationFrame(raf); ctx.clearRect(0,0,cv.width,cv.height); dot.style.display='none'; fl.style.opacity=0; };
+
+function loop(){
+  cancelAnimationFrame(raf);
+  const w = cv.width, h = cv.height, now = performance.now();
+  ctx.fillStyle = '#05060a'; ctx.fillRect(0,0,w,h);
+  if (mode === 'spiral'){
+    ang += 0.04; ctx.save(); ctx.translate(w/2,h/2); ctx.rotate(ang);
+    ctx.strokeStyle = color; ctx.lineWidth = 3*devicePixelRatio;
+    ctx.beginPath();
+    for (let i=0;i<900;i++){ const r=i*0.35*devicePixelRatio; ctx.lineTo(Math.cos(i*0.18)*r, Math.sin(i*0.18)*r); }
+    ctx.stroke(); ctx.restore();
+    dot.style.display='none';
+  } else if (mode === 'emdr'){
+    dot.style.display='block';
+    const spd = +$('#spd').value;
+    const max = stage.clientWidth - 40;
+    emdrX += emdrDir * (max / (spd/16));
+    if (emdrX < 20){ emdrX=20; emdrDir=1; }
+    if (emdrX > max){ emdrX=max; emdrDir=-1; }
+    dot.style.left = emdrX + 'px';
+  } else if (mode === 'color'){
+    ctx.fillStyle = color; ctx.fillRect(0,0,w,h);
+    dot.style.display='none';
+  } else if (mode === 'flash'){
+    ctx.fillStyle = color; ctx.fillRect(0,0,w,h);
+    const spd = +$('#spd').value;
+    if (now - flashT > spd){ flashT = now; fl.style.opacity = 1; setTimeout(()=>fl.style.opacity=0, 40); }
+    dot.style.display='none';
+  }
+  if (mode) raf = requestAnimationFrame(loop);
+}
+</script>
+</body>
+</html>
