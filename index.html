@@ -2,50 +2,58 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0b0d12">
+<meta name="theme-color" content="#05060a">
 <title>Newdri Sessão</title>
 <style>
 :root{
-  --bg:#0b0d12; --card:#151922; --line:#2a3140; --txt:#e8edf5; --dim:#8b95a8;
-  --acc:#c9a46a; --ok:#6ee7b7; --warn:#f59e0b; --flash:#fff;
+  --bg:#0b0d12; --card:#151922; --line:#2a3140; --txt:#e8edf5; --dim:#8b95a8; --acc:#c9a46a;
 }
-*{box-sizing:border-box}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.45 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif}
-body{padding:env(safe-area-inset-top) 14px 88px}
-h1{font-size:1.15rem;margin:8px 0 2px;letter-spacing:.04em}
-.sub{color:var(--dim);font-size:.82rem;margin:0 0 14px}
+body{padding:calc(12px + env(safe-area-inset-top)) 14px 96px}
+h1{font-size:1.12rem;margin:6px 0 2px;letter-spacing:.05em}
+.sub{color:var(--dim);font-size:.82rem;margin:0 0 12px}
 .row{display:flex;gap:8px;flex-wrap:wrap}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0}
-label{display:block;font-size:.72rem;color:var(--dim);margin:8px 0 4px;text-transform:uppercase;letter-spacing:.06em}
+label{display:block;font-size:.7rem;color:var(--dim);margin:8px 0 4px;text-transform:uppercase;letter-spacing:.07em}
 input,select,textarea{width:100%;background:#0e1118;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit}
 textarea{min-height:72px}
-button{border:0;border-radius:12px;padding:11px 14px;font-weight:600;cursor:pointer}
+button{border:0;border-radius:12px;padding:12px 14px;font-weight:700;cursor:pointer;font:inherit}
 .btn{background:var(--acc);color:#1a1408}
 .btn2{background:#222836;color:var(--txt);border:1px solid var(--line)}
-.btn3{background:#1c2433;color:var(--dim)}
+.btn3{background:#3a1c1c;color:#f5c2c2}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:#10141c;border-top:1px solid var(--line);padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
-.nav button{flex:1;background:transparent;color:var(--dim);font-size:.72rem}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;background:#10141c;border-top:1px solid var(--line);padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+.nav button{flex:1;background:transparent;color:var(--dim);font-size:.72rem;font-weight:600}
 .nav button.on{color:var(--acc)}
-.hidden{display:none}
-.tag{display:inline-block;font-size:.7rem;border:1px solid var(--line);border-radius:99px;padding:3px 8px;margin:2px;color:var(--dim)}
-.tag.on{border-color:var(--acc);color:var(--acc)}
+.hidden{display:none !important}
 .hist{font-size:.86rem;border-bottom:1px solid var(--line);padding:8px 0}
-.stage{position:relative;height:280px;border-radius:16px;overflow:hidden;background:#05060a;border:1px solid var(--line)}
-canvas{width:100%;height:100%;display:block}
-.flash{position:absolute;inset:0;opacity:0;background:#fff;pointer-events:none}
-.dot{position:absolute;top:50%;width:28px;height:28px;margin-top:-14px;border-radius:50%;background:#e8edf5;box-shadow:0 0 18px #fff}
-#colorWash{height:120px;border-radius:12px;border:1px solid var(--line)}
-.timer{font-variant-numeric:tabular-nums;font-size:1.4rem;color:var(--acc)}
+.timer{font-variant-numeric:tabular-nums;font-size:1.45rem;color:var(--acc)}
+.warn{color:#f5c2c2;font-size:.8rem}
+
+#overlay{
+  position:fixed;inset:0;z-index:80;background:#05060a;display:none;
+}
+#overlay.on{display:block}
+#cv{position:absolute;inset:0;width:100%;height:100%;display:block}
+#hud{
+  position:absolute;left:0;right:0;bottom:0;z-index:82;
+  display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+  padding:10px 10px calc(12px + env(safe-area-inset-bottom));
+  background:linear-gradient(transparent, rgba(0,0,0,.75));
+}
+#hud button{padding:10px 12px}
+#modeLabel{position:absolute;top:calc(10px + env(safe-area-inset-top));left:12px;z-index:82;color:#fff;font-size:.85rem;opacity:.7}
 </style>
 </head>
 <body>
 <header>
   <h1>NEWDRI · SESSÃO</h1>
-  <p class="sub" id="who">Paciente — registro local neste aparelho</p>
+  <p class="sub" id="who">Paciente — registro neste aparelho</p>
+  <p class="warn">Não abra pelo preview do Drive. Baixe o HTML e abra no Safari. Depois: Compartilhar → Adicionar à Tela de Início.</p>
 </header>
 
 <section id="v-sessao">
@@ -65,7 +73,7 @@ canvas{width:100%;height:100%;display:block}
       <option>Autohipnose</option>
       <option>Meditação</option>
       <option>EMDR com áudio</option>
-      <option>Espiral hipnótica</option>
+      <option>Pêndulo / espiral</option>
       <option>Cores + flash + PsicoTron</option>
       <option>Metáfora guiada</option>
       <option>Sono / indução noturna</option>
@@ -82,49 +90,32 @@ canvas{width:100%;height:100%;display:block}
     </select>
     <button class="btn2" style="margin-top:8px;width:100%" id="btnAudio">Abrir áudio no Drive</button>
   </div>
+
+  <div class="card">
+    <label>Estímulo em tela cheia</label>
+    <div class="row">
+      <button class="btn" data-go="pendulo">Pêndulo</button>
+      <button class="btn" data-go="espiral">Espiral</button>
+      <button class="btn" data-go="emdr">EMDR</button>
+      <button class="btn" data-go="flash">Flash</button>
+      <button class="btn" data-go="cor">Cor</button>
+    </div>
+  </div>
+
   <div class="card">
     <div class="grid2">
       <div><label>FC início</label><input id="hr0" inputmode="numeric" placeholder="bpm"></div>
       <div><label>FC fim</label><input id="hr1" inputmode="numeric" placeholder="bpm"></div>
-      <div><label>GSR / PsicoTron início</label><input id="gsr0" placeholder="valor ou ↓/↑"></div>
-      <div><label>GSR / PsicoTron fim</label><input id="gsr1" placeholder="queda = aceitação"></div>
+      <div><label>GSR início</label><input id="gsr0" placeholder="valor ou ↓"></div>
+      <div><label>GSR fim</label><input id="gsr1" placeholder="queda = aceitação"></div>
       <div><label>Profundidade 1–10</label><input id="depth" inputmode="numeric" placeholder="7"></div>
-      <div><label>Estímulo usado</label><input id="stimUsed" placeholder="espiral / flash / cor"></div>
+      <div><label>Estímulo usado</label><input id="stimUsed" placeholder="pêndulo / flash"></div>
     </div>
     <label>Metáfora</label>
     <input id="meta" placeholder="escada, oceano, luz dourada…">
     <label>Notas</label>
     <textarea id="notes" placeholder="o que grudou, resistência, âncora"></textarea>
   </div>
-</section>
-
-<section id="v-stim" class="hidden">
-  <div class="card">
-    <div class="row">
-      <button class="btn2" data-mode="spiral">Espiral</button>
-      <button class="btn2" data-mode="emdr">EMDR visual</button>
-      <button class="btn2" data-mode="color">Cores</button>
-      <button class="btn2" data-mode="flash">Flash + cor</button>
-      <button class="btn3" id="stimStop">Parar</button>
-    </div>
-    <label>Velocidade EMDR / flash</label>
-    <input type="range" id="spd" min="200" max="1600" value="700">
-    <label>Cor do wash</label>
-    <div class="row" id="swatches">
-      <span class="tag on" data-c="#1e3a5f">azul</span>
-      <span class="tag" data-c="#3f2a12">âmbar</span>
-      <span class="tag" data-c="#14261c">verde</span>
-      <span class="tag" data-c="#2a1220">violeta</span>
-      <span class="tag" data-c="#111">preto</span>
-    </div>
-    <div id="colorWash" style="background:#1e3a5f;margin-top:8px"></div>
-  </div>
-  <div class="stage" id="stage">
-    <canvas id="cv"></canvas>
-    <div class="dot" id="dot" style="display:none;left:20px"></div>
-    <div class="flash" id="fl"></div>
-  </div>
-  <p class="sub">Olhos no estímulo. Fone no áudio. PsicoTron nos eletrodos. Flash da tela marca o pulso — anote GSR quando cair.</p>
 </section>
 
 <section id="v-hist" class="hidden">
@@ -139,25 +130,37 @@ canvas{width:100%;height:100%;display:block}
 
 <section id="v-pac" class="hidden">
   <div class="card">
-    <label>Nome do paciente / clone</label>
-    <input id="pname" placeholder="Newton / Victoria / código">
-    <label>Código do clone (troca o arquivo de dados)</label>
-    <input id="pid" placeholder="newton | p001 | victoria">
+    <label>Nome</label>
+    <input id="pname" placeholder="Newton / Victoria">
+    <label>Código do clone</label>
+    <input id="pid" placeholder="newton | p001">
     <button class="btn" id="saveProf" style="margin-top:10px;width:100%">Aplicar neste aparelho</button>
-    <button class="btn2" id="newClone" style="margin-top:8px;width:100%">Novo clone vazio (apaga histórico local deste código)</button>
-    <p class="sub">Replicar para paciente: envie este mesmo HTML. Peça para ela colocar o nome e um código só dela. O histórico não sobe para a nuvem — fica no Safari/Chrome dela. Você recolhe o JSON no retorno da sessão.</p>
-    <p class="sub">Kardia / Apple Watch: anote FC à mão por enquanto. Integração automática HealthKit exige app nativo — próximo degrau.</p>
+    <button class="btn2" id="newClone" style="margin-top:8px;width:100%">Novo clone vazio</button>
+    <p class="sub">Cada código guarda um histórico separado neste aparelho. Recolha o JSON na sessão seguinte.</p>
   </div>
 </section>
 
 <nav class="nav">
   <button class="on" data-v="v-sessao">Sessão</button>
-  <button data-v="v-stim">Estímulo</button>
   <button data-v="v-hist">Histórico</button>
   <button data-v="v-pac">Paciente</button>
 </nav>
 
+<div id="overlay">
+  <canvas id="cv"></canvas>
+  <div id="modeLabel"></div>
+  <div id="hud">
+    <button class="btn2" data-go="pendulo">Pêndulo</button>
+    <button class="btn2" data-go="espiral">Espiral</button>
+    <button class="btn2" data-go="emdr">EMDR</button>
+    <button class="btn2" data-go="flash">Flash</button>
+    <button class="btn2" data-go="cor">Cor</button>
+    <button class="btn3" id="closeOv">Fechar</button>
+  </div>
+</div>
+
 <script>
+(function(){
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 const key = () => 'newdri.sess.' + (localStorage.getItem('newdri.pid') || 'padrao');
@@ -167,7 +170,7 @@ const saveAll = a => localStorage.setItem(key(), JSON.stringify(a));
 function who(){
   const n = localStorage.getItem('newdri.pname') || 'sem nome';
   const id = localStorage.getItem('newdri.pid') || 'padrao';
-  $('#who').textContent = n + ' · clone ' + id + ' · dados só neste aparelho';
+  $('#who').textContent = n + ' · clone ' + id;
   $('#pname').value = localStorage.getItem('newdri.pname') || '';
   $('#pid').value = localStorage.getItem('newdri.pid') || '';
 }
@@ -176,114 +179,168 @@ who();
 $$('.nav button').forEach(b => b.onclick = () => {
   $$('.nav button').forEach(x => x.classList.remove('on'));
   b.classList.add('on');
-  ['v-sessao','v-stim','v-hist','v-pac'].forEach(id => $('#'+id).classList.toggle('hidden', id !== b.dataset.v));
+  ['v-sessao','v-hist','v-pac'].forEach(id => $('#'+id).classList.toggle('hidden', id !== b.dataset.v));
   if (b.dataset.v === 'v-hist') renderHist();
 });
 
-let t0 = null, tick = null, mode = null, raf = 0, flashT = 0;
-function fmt(ms){
-  const s = Math.floor(ms/1000); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
-}
+let t0 = null, tick = null;
+const fmt = ms => {
+  const s = Math.floor(ms/1000);
+  return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+};
 $('#btnStart').onclick = () => {
   t0 = Date.now();
   clearInterval(tick);
-  tick = setInterval(() => $('#clock').textContent = fmt(Date.now()-t0), 250);
+  tick = setInterval(() => $('#clock').textContent = fmt(Date.now()-t0), 200);
 };
-$('#btnAudio').onclick = () => {
-  const u = $('#audio').value; if (u) window.open(u, '_blank');
-};
+$('#btnAudio').onclick = () => { const u = $('#audio').value; if (u) window.open(u, '_blank'); };
 $('#btnEnd').onclick = () => {
   const rec = {
-    id: crypto.randomUUID(),
-    start: t0 ? new Date(t0).toISOString() : new Date().toISOString(),
+    id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+    start: new Date(t0 || Date.now()).toISOString(),
     end: new Date().toISOString(),
     durSec: t0 ? Math.round((Date.now()-t0)/1000) : 0,
     proto: $('#proto').value,
     audio: $('#audio').selectedOptions[0].text,
     hr0: $('#hr0').value, hr1: $('#hr1').value,
     gsr0: $('#gsr0').value, gsr1: $('#gsr1').value,
-    depth: $('#depth').value,
-    stim: $('#stimUsed').value,
-    meta: $('#meta').value,
-    notes: $('#notes').value
+    depth: $('#depth').value, stim: $('#stimUsed').value,
+    meta: $('#meta').value, notes: $('#notes').value
   };
   const a = load(); a.unshift(rec); saveAll(a);
   t0 = null; clearInterval(tick); $('#clock').textContent = '00:00';
   alert('Sessão gravada: ' + rec.proto + ' · ' + rec.durSec + 's');
-  renderHist();
 };
 
 function renderHist(){
   const a = load();
-  $('#hist').innerHTML = a.length ? a.map(r => `<div class="hist"><b>${new Date(r.start).toLocaleString('pt-BR')}</b> · ${r.durSec}s<br>${r.proto} · ${r.audio}<br>FC ${r.hr0||'—'}→${r.hr1||'—'} · GSR ${r.gsr0||'—'}→${r.gsr1||'—'} · prof ${r.depth||'—'}<br>${r.meta||''} ${r.notes||''}</div>`).join('') : '<p class="sub">Nenhuma sessão neste clone.</p>';
+  $('#hist').innerHTML = a.length ? a.map(r =>
+    `<div class="hist"><b>${new Date(r.start).toLocaleString('pt-BR')}</b> · ${r.durSec}s<br>${r.proto} · ${r.audio}<br>FC ${r.hr0||'—'}→${r.hr1||'—'} · GSR ${r.gsr0||'—'}→${r.gsr1||'—'} · ${r.stim||''}<br>${r.meta||''} ${r.notes||''}</div>`
+  ).join('') : '<p class="sub">Nenhuma sessão neste clone.</p>';
 }
 function download(name, text, type){
-  const blob = new Blob([text], {type}); const u = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href=u; a.download=name; a.click(); URL.revokeObjectURL(u);
+  const blob = new Blob([text], {type});
+  const u = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=u; a.download=name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(u), 800);
 }
 $('#expCsv').onclick = () => {
   const a = load();
   const head = 'inicio,fim,duracao_s,protocolo,audio,fc_ini,fc_fim,gsr_ini,gsr_fim,profundidade,estimulo,metafora,notas';
-  const lines = a.map(r => [r.start,r.end,r.durSec,r.proto,r.audio,r.hr0,r.hr1,r.gsr0,r.gsr1,r.depth,r.stim,r.meta,r.notes].map(x => '"'+String(x||'').replace(/"/g,'""')+'"').join(','));
+  const lines = a.map(r => [r.start,r.end,r.durSec,r.proto,r.audio,r.hr0,r.hr1,r.gsr0,r.gsr1,r.depth,r.stim,r.meta,r.notes]
+    .map(x => '"'+String(x||'').replace(/"/g,'""')+'"').join(','));
   download('newdri-sessoes.csv', head+'\n'+lines.join('\n'), 'text/csv');
 };
-$('#expJson').onclick = () => download('newdri-sessoes.json', JSON.stringify({paciente:localStorage.getItem('newdri.pname'), clone:localStorage.getItem('newdri.pid'), sessoes:load()}, null, 2), 'application/json');
+$('#expJson').onclick = () => download('newdri-sessoes.json', JSON.stringify({
+  paciente: localStorage.getItem('newdri.pname'), clone: localStorage.getItem('newdri.pid'), sessoes: load()
+}, null, 2), 'application/json');
 
 $('#saveProf').onclick = () => {
   localStorage.setItem('newdri.pname', $('#pname').value.trim());
   localStorage.setItem('newdri.pid', ($('#pid').value.trim() || 'padrao').toLowerCase());
-  who(); alert('Clone aplicado.');
+  who();
 };
 $('#newClone').onclick = () => {
-  const id = ($('#pid').value.trim() || 'padrao').toLowerCase();
-  localStorage.setItem('newdri.pid', id);
+  localStorage.setItem('newdri.pid', ($('#pid').value.trim() || 'padrao').toLowerCase());
   localStorage.setItem('newdri.pname', $('#pname').value.trim());
   localStorage.setItem(key(), '[]');
-  who(); renderHist(); alert('Clone vazio pronto: ' + id);
+  who(); renderHist();
 };
 
-const cv = $('#cv'), ctx = cv.getContext('2d');
-const fl = $('#fl'), dot = $('#dot');
-let color = '#1e3a5f', ang = 0, emdrDir = 1, emdrX = 20;
-function resize(){ cv.width = cv.clientWidth*devicePixelRatio; cv.height = cv.clientHeight*devicePixelRatio; }
-resize(); addEventListener('resize', resize);
-$$('#swatches .tag').forEach(t => t.onclick = () => {
-  $$('#swatches .tag').forEach(x => x.classList.remove('on')); t.classList.add('on');
-  color = t.dataset.c; $('#colorWash').style.background = color;
-});
-$$('[data-mode]').forEach(b => b.onclick = () => { mode = b.dataset.mode; $('#stimUsed').value = mode; loop(); });
-$('#stimStop').onclick = () => { mode = null; cancelAnimationFrame(raf); ctx.clearRect(0,0,cv.width,cv.height); dot.style.display='none'; fl.style.opacity=0; };
+const ov = $('#overlay'), cv = $('#cv'), ctx = cv.getContext('2d');
+const names = {pendulo:'Pêndulo', espiral:'Espiral', emdr:'EMDR visual', flash:'Flash + cor', cor:'Campo de cor'};
+let mode = 'pendulo', raf = 0, tStart = 0, flashOn = false, lastFlash = 0, colorI = 0;
+const colors = ['#1e3a5f','#3f2a12','#14261c','#2a1220','#111111','#4a1020'];
 
-function loop(){
-  cancelAnimationFrame(raf);
-  const w = cv.width, h = cv.height, now = performance.now();
-  ctx.fillStyle = '#05060a'; ctx.fillRect(0,0,w,h);
-  if (mode === 'spiral'){
-    ang += 0.04; ctx.save(); ctx.translate(w/2,h/2); ctx.rotate(ang);
-    ctx.strokeStyle = color; ctx.lineWidth = 3*devicePixelRatio;
-    ctx.beginPath();
-    for (let i=0;i<900;i++){ const r=i*0.35*devicePixelRatio; ctx.lineTo(Math.cos(i*0.18)*r, Math.sin(i*0.18)*r); }
-    ctx.stroke(); ctx.restore();
-    dot.style.display='none';
-  } else if (mode === 'emdr'){
-    dot.style.display='block';
-    const spd = +$('#spd').value;
-    const max = stage.clientWidth - 40;
-    emdrX += emdrDir * (max / (spd/16));
-    if (emdrX < 20){ emdrX=20; emdrDir=1; }
-    if (emdrX > max){ emdrX=max; emdrDir=-1; }
-    dot.style.left = emdrX + 'px';
-  } else if (mode === 'color'){
-    ctx.fillStyle = color; ctx.fillRect(0,0,w,h);
-    dot.style.display='none';
-  } else if (mode === 'flash'){
-    ctx.fillStyle = color; ctx.fillRect(0,0,w,h);
-    const spd = +$('#spd').value;
-    if (now - flashT > spd){ flashT = now; fl.style.opacity = 1; setTimeout(()=>fl.style.opacity=0, 40); }
-    dot.style.display='none';
-  }
-  if (mode) raf = requestAnimationFrame(loop);
+function size(){
+  const d = Math.max(1, window.devicePixelRatio || 1);
+  cv.width = Math.floor(window.innerWidth * d);
+  cv.height = Math.floor(window.innerHeight * d);
 }
+function openMode(m){
+  mode = m;
+  $('#stimUsed').value = m;
+  $('#modeLabel').textContent = names[m] || m;
+  ov.classList.add('on');
+  size();
+  tStart = performance.now();
+  lastFlash = 0;
+  cancelAnimationFrame(raf);
+  raf = requestAnimationFrame(draw);
+}
+$$('[data-go]').forEach(b => b.onclick = () => openMode(b.getAttribute('data-go')));
+$('#closeOv').onclick = () => { ov.classList.remove('on'); cancelAnimationFrame(raf); };
+addEventListener('resize', () => { if (ov.classList.contains('on')) size(); });
+addEventListener('orientationchange', () => setTimeout(size, 250));
+
+function draw(now){
+  const w = cv.width, h = cv.height, t = (now - tStart) / 1000;
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.fillStyle = '#05060a';
+  ctx.fillRect(0,0,w,h);
+
+  if (mode === 'pendulo'){
+    const cx = w/2, top = h*0.12, len = h*0.55;
+    const ang = Math.sin(t * 1.15) * 0.72;
+    const bx = cx + Math.sin(ang)*len;
+    const by = top + Math.cos(ang)*len;
+    ctx.strokeStyle = '#c9a46a';
+    ctx.lineWidth = Math.max(3, w*0.006);
+    ctx.beginPath(); ctx.moveTo(cx, top); ctx.lineTo(bx, by); ctx.stroke();
+    ctx.fillStyle = '#f2e6c9';
+    ctx.beginPath(); ctx.arc(cx, top, Math.max(6, w*0.012), 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#fff6d8';
+    ctx.shadowColor = '#c9a46a'; ctx.shadowBlur = 28;
+    ctx.beginPath(); ctx.arc(bx, by, Math.max(22, w*0.045), 0, Math.PI*2); ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+
+  if (mode === 'espiral'){
+    ctx.save();
+    ctx.translate(w/2, h/2);
+    ctx.rotate(t * 0.7);
+    ctx.strokeStyle = '#d7b56a';
+    ctx.lineWidth = Math.max(2, w*0.004);
+    ctx.beginPath();
+    const max = Math.hypot(w,h)*0.55;
+    for (let i=0;i<1400;i++){
+      const r = i * max / 1400;
+      const a = i * 0.18;
+      const x = Math.cos(a)*r, y = Math.sin(a)*r;
+      if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  if (mode === 'emdr'){
+    const pad = w*0.08;
+    const x = pad + (Math.sin(t * 1.8)*0.5 + 0.5) * (w - pad*2);
+    const y = h*0.48;
+    ctx.fillStyle = '#ffffff';
+    ctx.shadowColor = '#fff'; ctx.shadowBlur = 40;
+    ctx.beginPath(); ctx.arc(x, y, Math.max(18, w*0.035), 0, Math.PI*2); ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+
+  if (mode === 'cor' || mode === 'flash'){
+    ctx.fillStyle = colors[colorI % colors.length];
+    ctx.fillRect(0,0,w,h);
+    if (now - lastFlash > 280){
+      colorI = (colorI + 1) % colors.length;
+      lastFlash = now;
+      if (mode === 'flash') flashOn = true;
+    }
+    if (mode === 'flash' && flashOn){
+      ctx.fillStyle = 'rgba(255,255,255,0.92)';
+      ctx.fillRect(0,0,w,h);
+      if (now - lastFlash > 55) flashOn = false;
+    }
+  }
+
+  raf = requestAnimationFrame(draw);
+}
+})();
 </script>
 </body>
 </html>
